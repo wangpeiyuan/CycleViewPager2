@@ -29,6 +29,7 @@ dependencies {
     implementation deps.appcompat
     implementation deps.coreKtx
     implementation deps.constraintLayout
+    implementation deps.viewpager2
 
     implementation project(':library')
 
