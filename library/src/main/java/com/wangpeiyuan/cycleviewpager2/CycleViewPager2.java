@@ -1,6 +1,7 @@
 package com.wangpeiyuan.cycleviewpager2;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -8,11 +9,13 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.wangpeiyuan.cycleviewpager2.adapter.CyclePagerAdapter;
 import com.wangpeiyuan.cycleviewpager2.adapter.CyclePagerFragmentAdapter;
+import com.wangpeiyuan.cycleviewpager2.indicator.Indicator;
 import com.wangpeiyuan.cycleviewpager2.util.Logger;
 
 import java.lang.ref.WeakReference;
@@ -43,8 +46,13 @@ public class CycleViewPager2 extends FrameLayout {
                     startAutoTurning();
                 }
             }
+            if (mIndicator != null) {
+                mIndicator.onChanged(getPagerRealCount(), getCurrentRealItem());
+            }
         }
     };
+
+    private Indicator mIndicator;
 
     public CycleViewPager2(@NonNull Context context) {
         super(context);
@@ -61,6 +69,7 @@ public class CycleViewPager2 extends FrameLayout {
         initialize(context, attrs);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CycleViewPager2(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initialize(context, attrs);
@@ -107,6 +116,7 @@ public class CycleViewPager2 extends FrameLayout {
             adapter.registerAdapterDataObserver(mAdapterDataObserver);
             mViewPager2.setAdapter(adapter);
             setCurrentItem(1, false);
+            initIndicator();
             return;
         }
         throw new IllegalArgumentException("adapter must be an instance of CyclePagerAdapter or CyclePagerFragmentAdapter");
@@ -115,6 +125,21 @@ public class CycleViewPager2 extends FrameLayout {
     @Nullable
     public RecyclerView.Adapter getAdapter() {
         return mViewPager2.getAdapter();
+    }
+
+    private int getPagerRealCount() {
+        RecyclerView.Adapter adapter = getAdapter();
+        if (adapter instanceof CyclePagerAdapter) {
+            return ((CyclePagerAdapter) adapter).getRealItemCount();
+        }
+        if (adapter instanceof CyclePagerFragmentAdapter) {
+            return ((CyclePagerFragmentAdapter) adapter).getRealItemCount();
+        }
+        return 0;
+    }
+
+    private int getCurrentRealItem() {
+        return getCurrentItem() >= 1 ? getCurrentItem() - 1 : getCurrentItem();
     }
 
     public void setOrientation(@ViewPager2.Orientation int orientation) {
@@ -144,6 +169,9 @@ public class CycleViewPager2 extends FrameLayout {
 
     public void setCurrentItem(int item, boolean smoothScroll) {
         mViewPager2.setCurrentItem(item, smoothScroll);
+        if (!smoothScroll && mIndicator != null) {
+            mIndicator.onPageSelected(getCurrentRealItem());
+        }
     }
 
     public int getCurrentItem() {
@@ -185,6 +213,24 @@ public class CycleViewPager2 extends FrameLayout {
         return super.dispatchTouchEvent(ev);
     }
 
+    public void setIndicator(@Nullable Indicator indicator) {
+        if (mIndicator == indicator) return;
+        removeIndicatorView();
+        mIndicator = indicator;
+        initIndicator();
+    }
+
+    private void initIndicator() {
+        if (mIndicator == null || getAdapter() == null) return;
+        addView(mIndicator.getIndicatorView());
+        mIndicator.onChanged(getPagerRealCount(), getCurrentRealItem());
+    }
+
+    private void removeIndicatorView() {
+        if (mIndicator == null) return;
+        removeView(mIndicator.getIndicatorView());
+    }
+
     //1.normal:
     //onPageScrollStateChanged(state=1) -> onPageScrolled... -> onPageScrollStateChanged(state=2)
     // -> onPageSelected -> onPageScrolled... -> onPageScrollStateChanged(state=0)
@@ -209,6 +255,9 @@ public class CycleViewPager2 extends FrameLayout {
             Logger.d("onPageSelected: " + position);
             if (isBeginPagerChange) {
                 mTempPosition = position;
+            }
+            if (mIndicator != null) {
+                mIndicator.onPageSelected(getCurrentRealItem());
             }
         }
 

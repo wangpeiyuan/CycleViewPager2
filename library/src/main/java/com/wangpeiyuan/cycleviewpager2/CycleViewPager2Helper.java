@@ -1,11 +1,14 @@
 package com.wangpeiyuan.cycleviewpager2;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.wangpeiyuan.cycleviewpager2.indicator.DotsIndicator;
+import com.wangpeiyuan.cycleviewpager2.indicator.Indicator;
 import com.wangpeiyuan.cycleviewpager2.itemdecoration.MarginItemDecoration;
 import com.wangpeiyuan.cycleviewpager2.transformer.MultiplePagerScaleInTransformer;
 
@@ -27,6 +30,8 @@ public class CycleViewPager2Helper {
     private List<ViewPager2.OnPageChangeCallback> pageChangeCallbacks;
 
     private long autoTurningTime;
+
+    private Indicator indicator;
 
     public CycleViewPager2Helper(@NonNull CycleViewPager2 cycleViewPager2) {
         this.cycleViewPager2 = cycleViewPager2;
@@ -84,6 +89,28 @@ public class CycleViewPager2Helper {
         return this;
     }
 
+    public CycleViewPager2Helper setIndicator(@Nullable Indicator indicator) {
+        this.indicator = indicator;
+        return this;
+    }
+
+    public CycleViewPager2Helper setDotsIndicator(float radius, @ColorInt int selectedColor,
+                                                  @ColorInt int unSelectedColor, float dotsPadding,
+                                                  int leftMargin, int bottomMargin, int rightMargin,
+                                                  @DotsIndicator.Direction int direction) {
+        DotsIndicator dotsIndicator = new DotsIndicator(cycleViewPager2.getContext());
+        dotsIndicator.setRadius(radius);
+        dotsIndicator.setSelectedColor(selectedColor);
+        dotsIndicator.setUnSelectedColor(unSelectedColor);
+        dotsIndicator.setDotsPadding(dotsPadding);
+        dotsIndicator.setLeftMargin(leftMargin);
+        dotsIndicator.setBottomMargin(bottomMargin);
+        dotsIndicator.setRightMargin(rightMargin);
+        dotsIndicator.setDirection(direction);
+        this.indicator = dotsIndicator;
+        return this;
+    }
+
     public void build() {
         cycleViewPager2.setOrientation(orientation);
         cycleViewPager2.setOffscreenPageLimit(limit);
@@ -104,6 +131,7 @@ public class CycleViewPager2Helper {
                 cycleViewPager2.registerOnPageChangeCallback(pageChangeCallback);
             }
         }
+        cycleViewPager2.setIndicator(indicator);
         if (autoTurningTime > 0) {
             cycleViewPager2.setAutoTurning(autoTurningTime);
         }
