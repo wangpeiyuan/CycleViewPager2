@@ -2,4 +2,8 @@
 <resources>
     <dimen name="viewpager_next_item_visible">26dp</dimen>
     <dimen name="viewpager_current_item_horizontal_margin">42dp</dimen>
+
+    <dimen name="dots_radius">4dp</dimen>
+    <dimen name="dots_padding">4dp</dimen>
+    <dimen name="dots_bottom_margin">4dp</dimen>
 </resources>

@@ -1,5 +1,6 @@
 package com.wangpeiyuan.cycleviewpager2.simple
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wangpeiyuan.cycleviewpager2.CycleViewPager2
 import com.wangpeiyuan.cycleviewpager2.CycleViewPager2Helper
 import com.wangpeiyuan.cycleviewpager2.adapter.CyclePagerAdapter
+import com.wangpeiyuan.cycleviewpager2.indicator.DotsIndicator
 import com.wangpeiyuan.cycleviewpager2.util.Logger
 
 class MainActivity : AppCompatActivity() {
@@ -30,9 +32,6 @@ class MainActivity : AppCompatActivity() {
 
         initData()
 
-        val nextItemVisiblePx = resources.getDimension(R.dimen.viewpager_next_item_visible)
-        val currentItemHorizontalMarginPx =
-            resources.getDimension(R.dimen.viewpager_current_item_horizontal_margin)
         val adapter = MyCyclePagerAdapter()
 
         findViewById<Button>(R.id.btn_add).setOnClickListener {
@@ -47,12 +46,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val nextItemVisiblePx = resources.getDimension(R.dimen.viewpager_next_item_visible)
+        val currentItemHorizontalMarginPx =
+            resources.getDimension(R.dimen.viewpager_current_item_horizontal_margin)
+        val dotsRadius = resources.getDimension(R.dimen.dots_radius)
+        val dotsPadding = resources.getDimension(R.dimen.dots_padding)
+        val dotsBottomMargin = resources.getDimension(R.dimen.dots_bottom_margin)
+
         CycleViewPager2Helper(banner)
             .setAdapter(adapter)
             .setMultiplePagerScaleInTransformer(
                 nextItemVisiblePx.toInt(),
                 currentItemHorizontalMarginPx.toInt(),
                 0.1f
+            )
+            .setDotsIndicator(
+                dotsRadius,
+                Color.RED,
+                Color.WHITE,
+                dotsPadding,
+                0,
+                dotsBottomMargin.toInt(),
+                0,
+                DotsIndicator.Direction.CENTER
             )
             .setAutoTurning(3000L)
             .build()
