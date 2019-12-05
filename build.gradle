@@ -32,7 +32,7 @@ task clean(type: Delete) {
 // Variables for entire project
 ext {
     // SDK versions
-    minSdkVersion = 18
+    minSdkVersion = 19
     targetSdkVersion = 29
     compileSdkVersion = 29
 

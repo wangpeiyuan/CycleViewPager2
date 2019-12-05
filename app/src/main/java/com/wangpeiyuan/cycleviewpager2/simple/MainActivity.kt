@@ -76,6 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initData() {
         items.add(resList[0])
+        items.add(resList[1])
         items.add(resList[2])
         items.add(resList[3])
     }
