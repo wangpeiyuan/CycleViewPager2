@@ -1,18 +1,18 @@
 # CycleViewPager2
 ## Introduction
 
-使用 ViewPager2 实现无限轮播效果，可以用来实现 banner。
+使用 `ViewPager2` 实现无限轮播效果，可以用来实现 banner。
 
 ## Screenshots
 
-![cycle_normal](assets/cycle_normal.png)
-![cycle_mutiple](assets/cycle_mutiple.png)
+![cycle_normal](assets/cycle_normal.jpg)
+![cycle_mutiple](assets/cycle_mutiple.jpg)
 
 ## Features
 
 * 支持无限自动轮播
 * 支持圆点指示符及自定义
-* 支持一屏显示 3 个 Item 的切换效果
+* 支持一屏显示 3 个 item 的切换效果
 
 ## Getting started
 
@@ -29,7 +29,7 @@ allprojects {
 在项目的 `build.gradle` 中添加
 ```
 dependencies {
-    implementation 'com.github.wangpeiyuan:CycleViewPager2:v1.0.0'
+    implementation 'com.github.wangpeiyuan:CycleViewPager2:v1.0.2'
 }
 ```
 
@@ -56,7 +56,7 @@ ViewPager2 最新版本请点击[**此处**](https://developer.android.com/jetpa
         app:layout_constraintTop_toTopOf="parent" />
 ```
 
-2. 继承 `CyclePagerAdapter` 或 `CyclePagerFragmentAdapter` 实现相关方法，跟 Recyclerview 的 adapter 基本类似，如：
+2. 继承 `CyclePagerAdapter` 或 `CyclePagerFragmentAdapter` 实现相关方法，跟 `RecyclerView` 的 `Adapter` 基本类似，如：
 ```
 private inner class MyCyclePagerAdapter : CyclePagerAdapter<PagerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
