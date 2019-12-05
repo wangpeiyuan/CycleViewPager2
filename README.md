@@ -5,11 +5,13 @@
 
 ## Screenshots
 
-![cycle-MultiplePagerScaleIn](assets/cycle.gif)
+![cycle_normal](assets/cycle_normal.png)
+![cycle_mutiple](assets/cycle_mutiple.png)
 
 ## Features
 
 * 支持无限自动轮播
+* 支持圆点指示符及自定义
 * 支持一屏显示 3 个 Item 的切换效果
 
 ## Getting started
@@ -34,7 +36,7 @@ dependencies {
 **注意：还需要自行添加 ViewPager2 的依赖**。如：
 ```
 dependencies {
-    implementation "androidx.viewpager2:viewpager2:1.0.0-beta04"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 }
 ``` 
 
@@ -42,12 +44,89 @@ ViewPager2 最新版本请点击[**此处**](https://developer.android.com/jetpa
 
 ## Usage
 
-//todo
+1. 在 XML 布局文件中：
+```
+<com.wangpeiyuan.cycleviewpager2.CycleViewPager2
+        android:id="@+id/banner"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+```
 
-## Todo
+2. 继承 `CyclePagerAdapter` 或 `CyclePagerFragmentAdapter` 实现相关方法，跟 Recyclerview 的 adapter 基本类似，如：
+```
+private inner class MyCyclePagerAdapter : CyclePagerAdapter<PagerViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
+        return PagerViewHolder(LayoutInflater.from(parent.context)
+                .inflate(R.layout.fragment_pager, parent, false)
+        )
+    }
 
-- [ ] 增加 Indicator
-- [ ] 增加其他切换效果
+    override fun getRealItemCount(): Int = items.size
+
+    override fun onRealBindViewHolder(holder: PagerViewHolder, position: Int) {
+        holder.ivPager.setImageResource(items[position])
+        holder.tvTitle.text = position.toString()
+    }
+}
+
+private inner class PagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    var ivPager: ImageView = itemView.findViewById(R.id.iv_pager)
+    var tvTitle: TextView = itemView.findViewById(R.id.tv_title)
+} 
+```
+
+3. 通过 `CycleViewPager2` 设置相关参数。
+``` 
+//设置 adapter，此 adapter 必须是继承自 CyclePagerAdapter 或 CyclePagerFragmentAdapter
+cycleViewPager2.setAdapter(adapter)
+//设置指示符
+cycleViewPager2.setIndicator(indicator)
+//设置自动轮播间隔
+cycleViewPager2.setAutoTurning(autoTurningTime)
+//设置切换效果，可以多个效果组合
+cycleViewPager2.setPageTransformer(compositePageTransformer)
+//添加间距
+cycleViewPager2.addItemDecoration(itemDecoration)
+//添加切换监听
+cycleViewPager2.registerOnPageChangeCallback(pageChangeCallback)
+
+cycleViewPager2.setOffscreenPageLimit(limit)
+
+cycleViewPager2.setOrientation(orientation)
+```
+
+或者使用 `CycleViewPager2Helper` 方式。
+``` 
+CycleViewPager2Helper(banner)
+            .setAdapter(adapter)
+            .setMultiplePagerScaleInTransformer(
+                nextItemVisiblePx.toInt(),
+                currentItemHorizontalMarginPx.toInt(),
+                0.1f
+            )
+            .setDotsIndicator(
+                dotsRadius,
+                Color.RED,
+                Color.WHITE,
+                dotsPadding,
+                0,
+                dotsBottomMargin.toInt(),
+                0,
+                DotsIndicator.Direction.CENTER
+            )
+            .setAutoTurning(3000L)
+            .build()
+```
+
+4. 更多特殊效果
+
+* 指示符（Indicator），目前库中仅简单实现了圆点的指示符 `DotsIndicator`，更多的效果可以实现 `Indicator` 接口自定义，具体可以参考 `DotsIndicator` 的实现。
+* `MultiplePagerScaleInTransformer`，实现了一屏多个的效果，这个效果需要配合 `MarginItemDecoration` 来使用（也可以通过设置 item 的间距达到相同的效果）。
+* 更多的切换效果（PageTransformer），需要自己实现 `ViewPager2.PageTransformer`。
 
 ## License
 
