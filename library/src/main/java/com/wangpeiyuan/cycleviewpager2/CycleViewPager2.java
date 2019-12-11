@@ -213,6 +213,18 @@ public class CycleViewPager2 extends FrameLayout {
         return super.dispatchTouchEvent(ev);
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        startAutoTurning();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        stopAutoTurning();
+    }
+
     public void setIndicator(@Nullable Indicator indicator) {
         if (mIndicator == indicator) return;
         removeIndicatorView();
