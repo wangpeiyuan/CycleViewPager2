@@ -1,5 +1,6 @@
 package com.wangpeiyuan.cycleviewpager2.simple
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -44,6 +45,9 @@ class MainActivity : AppCompatActivity() {
                 items.removeAt(index)
                 adapter.notifyDataSetChanged()
             }
+        }
+        findViewById<Button>(R.id.btn_jump_viewpager2).setOnClickListener {
+            startActivity(Intent(this, TestViewPager2Activity::class.java))
         }
 
         val nextItemVisiblePx = resources.getDimension(R.dimen.viewpager_next_item_visible)

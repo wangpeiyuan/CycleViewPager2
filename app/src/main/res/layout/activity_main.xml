@@ -34,4 +34,14 @@
         app:layout_constraintStart_toEndOf="@+id/btn_add"
         app:layout_constraintTop_toBottomOf="@+id/banner" />
 
+    <Button
+        android:id="@+id/btn_jump_viewpager2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="test_viewpager2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_remove"
+        app:layout_constraintTop_toBottomOf="@+id/banner" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
