@@ -2,6 +2,8 @@ package com.wangpeiyuan.cycleviewpager2;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -21,6 +23,8 @@ import com.wangpeiyuan.cycleviewpager2.util.Logger;
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 
+import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
+
 /**
  * Created by wangpeiyuan on 2019-12-02.
  */
@@ -32,6 +36,8 @@ public class CycleViewPager2 extends FrameLayout {
     private long autoTurningTime;
     private boolean isTurning = false;
     private AutoTurningRunnable mAutoTurningRunnable;
+
+    private int mPendingCurrentItem = NO_POSITION;
 
     private RecyclerView.AdapterDataObserver mAdapterDataObserver = new RecyclerView.AdapterDataObserver() {
         @Override
@@ -168,6 +174,7 @@ public class CycleViewPager2 extends FrameLayout {
     }
 
     public void setCurrentItem(int item, boolean smoothScroll) {
+        Logger.d("setCurrentItem " + item);
         mViewPager2.setCurrentItem(item, smoothScroll);
         if (!smoothScroll && mIndicator != null) {
             mIndicator.onPageSelected(getCurrentRealItem());
@@ -225,6 +232,40 @@ public class CycleViewPager2 extends FrameLayout {
         stopAutoTurning();
     }
 
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.mCurrentItem = getCurrentItem();
+        Logger.d("onSaveInstanceState: " + ss.mCurrentItem);
+        return ss;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        mPendingCurrentItem = ss.mCurrentItem;
+        Logger.d("onRestoreInstanceState: " + mPendingCurrentItem);
+        restorePendingState();
+    }
+
+    private void restorePendingState() {
+        if (mPendingCurrentItem == NO_POSITION) {
+            // No state to restore, or state is already restored
+            return;
+        }
+        int currentItem = Math.max(0, Math.min(mPendingCurrentItem, Objects.requireNonNull(getAdapter()).getItemCount() - 1));
+        Logger.d("restorePendingState: " + currentItem);
+        mPendingCurrentItem = NO_POSITION;
+        setCurrentItem(currentItem, false);
+    }
+
     public void setIndicator(@Nullable Indicator indicator) {
         if (mIndicator == indicator) return;
         removeIndicatorView();
@@ -260,6 +301,9 @@ public class CycleViewPager2 extends FrameLayout {
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             Logger.d("onPageScrolled: " + position + " positionOffset: " + positionOffset
                     + " positionOffsetPixels: " + positionOffsetPixels);
+            if (mIndicator != null) {
+                mIndicator.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
         }
 
         @Override
@@ -275,17 +319,21 @@ public class CycleViewPager2 extends FrameLayout {
 
         @Override
         public void onPageScrollStateChanged(int state) {
-            Logger.d("onPageScrollStateChanged: " + state);
+            Logger.d("onPageScrollStateChanged: state " + state);
             if (state == ViewPager2.SCROLL_STATE_DRAGGING ||
                     (isTurning && state == ViewPager2.SCROLL_STATE_SETTLING)) {
                 isBeginPagerChange = true;
             } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
                 isBeginPagerChange = false;
                 int fixCurrentItem = getFixCurrentItem(mTempPosition);
-                if (fixCurrentItem != INVALID_ITEM_POSITION) {
+                if (fixCurrentItem != INVALID_ITEM_POSITION && fixCurrentItem != mTempPosition) {
                     mTempPosition = INVALID_ITEM_POSITION;
+                    Logger.d("onPageScrollStateChanged: fixCurrentItem " + fixCurrentItem);
                     setCurrentItem(fixCurrentItem, false);
                 }
+            }
+            if (mIndicator != null) {
+                mIndicator.onPageScrollStateChanged(state);
             }
         }
 
@@ -320,5 +368,53 @@ public class CycleViewPager2 extends FrameLayout {
                 cycleViewPager2.postDelayed(cycleViewPager2.mAutoTurningRunnable, cycleViewPager2.autoTurningTime);
             }
         }
+    }
+
+    static class SavedState extends BaseSavedState {
+        int mCurrentItem;
+
+        SavedState(Parcel source) {
+            super(source);
+            readValues(source, null);
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        SavedState(Parcel source, ClassLoader loader) {
+            super(source, loader);
+            readValues(source, loader);
+        }
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private void readValues(Parcel source, ClassLoader loader) {
+            mCurrentItem = source.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(mCurrentItem);
+        }
+
+        public static final Creator<SavedState> CREATOR = new ClassLoaderCreator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel source, ClassLoader loader) {
+                return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                        ? new SavedState(source, loader)
+                        : new SavedState(source);
+            }
+
+            @Override
+            public SavedState createFromParcel(Parcel source) {
+                return createFromParcel(source, null);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 }

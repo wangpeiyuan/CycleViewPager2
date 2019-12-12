@@ -1,7 +1,7 @@
 # CycleViewPager2
 ## Introduction
 
-使用 `ViewPager2` 实现无限轮播效果，可以用来实现 banner。
+使用 `ViewPager2` 实现无限轮播效果，可以用来实现 banner 以及上下滚动文字广告等。
 
 ## Screenshots
 
@@ -11,6 +11,7 @@
 ## Features
 
 * 支持无限自动轮播
+* 支持水平竖直方向
 * 支持圆点指示符及自定义
 * 支持一屏显示 3 个 item 的切换效果
 
@@ -29,7 +30,7 @@ allprojects {
 在项目的 `build.gradle` 中添加
 ```
 dependencies {
-    implementation 'com.github.wangpeiyuan:CycleViewPager2:v1.0.3'
+    implementation 'com.github.wangpeiyuan:CycleViewPager2:v1.0.4'
 }
 ```
 

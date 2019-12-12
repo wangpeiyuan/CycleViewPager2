@@ -120,6 +120,16 @@ public class DotsIndicator extends View implements Indicator {
         postInvalidate();
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        //do nothing
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        //do nothing
+    }
+
     public void setRadius(float radius) {
         this.mRadius = radius;
     }
