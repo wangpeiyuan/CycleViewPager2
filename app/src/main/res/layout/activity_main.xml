@@ -8,7 +8,7 @@
 
     <com.wangpeiyuan.cycleviewpager2.CycleViewPager2
         android:id="@+id/banner"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
