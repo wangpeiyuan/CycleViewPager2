@@ -1,7 +1,7 @@
 # CycleViewPager2
 ## Introduction
 
-使用 `ViewPager2` 实现无限轮播效果，可以用来实现 banner。
+使用 `ViewPager2` 实现无限轮播效果，可以用来实现 banner 以及上下滚动文字广告等。
 
 ## Screenshots
 
