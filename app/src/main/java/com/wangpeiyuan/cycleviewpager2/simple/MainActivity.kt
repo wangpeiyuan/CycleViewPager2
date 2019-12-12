@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.wangpeiyuan.cycleviewpager2.CycleViewPager2
 import com.wangpeiyuan.cycleviewpager2.CycleViewPager2Helper
 import com.wangpeiyuan.cycleviewpager2.adapter.CyclePagerAdapter
@@ -22,26 +23,34 @@ class MainActivity : AppCompatActivity() {
 
     private val resList = listOf(R.drawable.one, R.drawable.two, R.drawable.three, R.drawable.four)
     private lateinit var banner: CycleViewPager2
-    private var items = mutableListOf<Int>()
+    private var bannerItems = mutableListOf<Int>()
+
+    private lateinit var verticalCycleViewPager: CycleViewPager2
+    private var textList = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Logger.setIsDebug(true)
         banner = findViewById(R.id.banner)
+        verticalCycleViewPager = findViewById(R.id.vertical_cycleViewPager)
+        setBannerData()
+        setTextData()
+    }
 
+    private fun setBannerData() {
         initData()
 
         val adapter = MyCyclePagerAdapter()
 
         findViewById<Button>(R.id.btn_add).setOnClickListener {
-            items.add(resList.random())
+            bannerItems.add(resList.random())
             adapter.notifyDataSetChanged()
         }
         findViewById<Button>(R.id.btn_remove).setOnClickListener {
-            if (items.isNotEmpty()) {
-                val index = items.size - 1
-                items.removeAt(index)
+            if (bannerItems.isNotEmpty()) {
+                val index = bannerItems.size - 1
+                bannerItems.removeAt(index)
                 adapter.notifyDataSetChanged()
             }
         }
@@ -75,10 +84,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        items.add(resList[0])
-        items.add(resList[1])
-        items.add(resList[2])
-        items.add(resList[3])
+        bannerItems.add(resList[0])
+        bannerItems.add(resList[1])
+        bannerItems.add(resList[2])
+        bannerItems.add(resList[3])
+    }
+
+    private fun setTextData() {
+        textList.add(resources.getString(R.string.text_scroll_01))
+        textList.add(resources.getString(R.string.text_scroll_02))
+        textList.add(resources.getString(R.string.text_scroll_03))
+
+        val adapter = TextCyclePagerAdapter()
+        CycleViewPager2Helper(verticalCycleViewPager)
+            .setOrientation(ViewPager2.ORIENTATION_VERTICAL)
+            .setAdapter(adapter)
+            .setAutoTurning(2000L)
+            .build()
     }
 
     private inner class MyCyclePagerAdapter :
@@ -91,11 +113,11 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        override fun getRealItemCount(): Int = items.size
+        override fun getRealItemCount(): Int = bannerItems.size
 
         override fun onRealBindViewHolder(holder: PagerViewHolder, position: Int) {
             Log.d(TAG, "onRealBindViewHolder $position")
-            holder.ivPager.setImageResource(items[position])
+            holder.ivPager.setImageResource(bannerItems[position])
             holder.tvTitle.text = position.toString()
         }
 
@@ -104,5 +126,26 @@ class MainActivity : AppCompatActivity() {
     private inner class PagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var ivPager: ImageView = itemView.findViewById(R.id.iv_pager)
         var tvTitle: TextView = itemView.findViewById(R.id.tv_title)
+    }
+
+    private inner class TextCyclePagerAdapter :
+        CyclePagerAdapter<TextViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextViewHolder {
+            return TextViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_vertical_cycleviewpager, parent, false)
+            )
+        }
+
+        override fun getRealItemCount(): Int = textList.size
+
+        override fun onRealBindViewHolder(holder: TextViewHolder, position: Int) {
+            holder.tvItemContent.text = textList[position]
+        }
+
+    }
+
+    private inner class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var tvItemContent: TextView = itemView.findViewById(R.id.tv_item_content)
     }
 }

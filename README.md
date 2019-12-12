@@ -6,11 +6,12 @@
 ## Screenshots
 
 ![cycle_normal](assets/cycle_normal.jpg)
-![cycle_mutiple](assets/cycle_mutiple.jpg)
+![cycle_mutiple](assets/cycle_mutiple.png)
 
 ## Features
 
 * 支持无限自动轮播
+* 支持水平竖直方向
 * 支持圆点指示符及自定义
 * 支持一屏显示 3 个 item 的切换效果
 

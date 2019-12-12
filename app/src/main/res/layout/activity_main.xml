@@ -34,4 +34,16 @@
         app:layout_constraintStart_toEndOf="@+id/btn_add"
         app:layout_constraintTop_toBottomOf="@+id/banner" />
 
+    <com.wangpeiyuan.cycleviewpager2.CycleViewPager2
+        android:id="@+id/vertical_cycleViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_remove" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
