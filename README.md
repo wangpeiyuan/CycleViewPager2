@@ -6,7 +6,7 @@
 ## Screenshots
 
 ![cycle_normal](assets/cycle_normal.jpg)
-![cycle_mutiple](assets/cycle_mutiple.png)
+![cycle_mutiple](assets/cycle_mutiple.jpg)
 
 ## Features
 
