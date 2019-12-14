@@ -30,7 +30,7 @@ allprojects {
 在项目的 `build.gradle` 中添加
 ```
 dependencies {
-    implementation 'com.github.wangpeiyuan:CycleViewPager2:v1.0.4'
+    implementation 'com.github.wangpeiyuan:CycleViewPager2:v1.0.5'
 }
 ```
 
