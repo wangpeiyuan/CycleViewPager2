@@ -16,7 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TestViewPager2Activity" />
+        <activity
+            android:name=".TestViewPager2Activity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout|navigation" />
     </application>
 
 </manifest>

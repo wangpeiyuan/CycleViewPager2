@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.wangpeiyuan.cycleviewpager2.itemdecoration.MarginItemDecoration
 
 /**
  * Created by wangpeiyuan on 2019-12-11.
@@ -22,6 +23,7 @@ class TestViewPager2Activity : AppCompatActivity() {
         initData()
         viewpager2 = findViewById(R.id.viewpager2)
         viewpager2.adapter = SimapleAdapter(this)
+        viewpager2.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.viewpager_current_item_horizontal_margin).toInt()))
     }
 
     private fun initData() {
