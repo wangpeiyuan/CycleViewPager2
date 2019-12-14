@@ -5,8 +5,17 @@
 
 ## Screenshots
 
-![cycle_normal](assets/cycle_normal.jpg)
-![cycle_mutiple](assets/cycle_mutiple.jpg)
+1.MultiplePagerScaleInTransformer
+
+![cycle](assets/cycle.gif)
+
+2.ZoomOutPageTransformer
+
+![cycle_zoom](assets/cycle_zoom.gif)
+
+3.DepthPageTransformer
+
+![cycle_depth](assets/cycle_depth.gif)
 
 ## Features
 
