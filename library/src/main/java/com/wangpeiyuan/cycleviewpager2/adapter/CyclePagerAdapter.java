@@ -3,13 +3,14 @@ package com.wangpeiyuan.cycleviewpager2.adapter;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.wangpeiyuan.cycleviewpager2.util.CyclePositionUtil;
+
 import java.util.List;
 
 import static androidx.recyclerview.widget.RecyclerView.NO_ID;
 
 /**
  * Created by wangpeiyuan on 2019-12-02.
- * Modified by NaJiPeng on 2019-12-16.
  */
 public abstract class CyclePagerAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
@@ -20,36 +21,23 @@ public abstract class CyclePagerAdapter<VH extends RecyclerView.ViewHolder> exte
 
     @Override
     public final void onBindViewHolder(@NonNull VH holder, int position) {
-        onBindRealViewHolder(holder, getFixPosition(position));
+        onBindRealViewHolder(holder, CyclePositionUtil.getRealPosition(position, getRealItemCount()));
     }
 
     @Override
     public final void onBindViewHolder(@NonNull VH holder, int position, @NonNull List<Object> payloads) {
-        super.onBindViewHolder(holder, getFixPosition(position), payloads);
+        super.onBindViewHolder(holder, CyclePositionUtil.getRealPosition(position, getRealItemCount()), payloads);
     }
 
 
     @Override
     public final int getItemViewType(int position) {
-        return getRealItemViewType(getFixPosition(position));
+        return getRealItemViewType(CyclePositionUtil.getRealPosition(position, getRealItemCount()));
     }
 
     @Override
     public final long getItemId(int position) {
-        return getRealItemId(getFixPosition(position));
-    }
-
-    private int getFixPosition(int position) {
-        int fixPosition;
-        int realItemCount = getRealItemCount();
-        if (position == 0) {
-            fixPosition = realItemCount - 1;
-        } else if (position == realItemCount + 1) {
-            fixPosition = 0;
-        } else {
-            fixPosition = position - 1;
-        }
-        return fixPosition;
+        return getRealItemId(CyclePositionUtil.getRealPosition(position, getRealItemCount()));
     }
 
     public abstract int getRealItemCount();
