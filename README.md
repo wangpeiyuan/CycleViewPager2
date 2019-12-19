@@ -5,8 +5,17 @@
 
 ## Screenshots
 
-![cycle_normal](assets/cycle_normal.jpg)
-![cycle_mutiple](assets/cycle_mutiple.jpg)
+1. MultiplePagerScaleInTransformer
+
+![cycle](assets/cycle.gif)
+
+2. ZoomOutPageTransformer
+
+![cycle_zoom](assets/cycle_zoom.gif)
+
+3. DepthPageTransformer
+
+![cycle_depth](assets/cycle_depth.gif)
 
 ## Features
 
@@ -14,6 +23,7 @@
 * 支持水平竖直方向
 * 支持圆点指示符及自定义
 * 支持一屏显示 3 个 item 的切换效果
+* 支持 ZoomOutPageTransformer & DepthPageTransformer 效果
 
 ## Getting started
 
@@ -30,7 +40,7 @@ allprojects {
 在项目的 `build.gradle` 中添加
 ```
 dependencies {
-    implementation 'com.github.wangpeiyuan:CycleViewPager2:v1.0.4'
+    implementation 'com.github.wangpeiyuan:CycleViewPager2:v1.0.7'
 }
 ```
 
@@ -68,7 +78,7 @@ private inner class MyCyclePagerAdapter : CyclePagerAdapter<PagerViewHolder>() {
 
     override fun getRealItemCount(): Int = items.size
 
-    override fun onRealBindViewHolder(holder: PagerViewHolder, position: Int) {
+    override fun onBindRealViewHolder(holder: PagerViewHolder, position: Int) {
         holder.ivPager.setImageResource(items[position])
         holder.tvTitle.text = position.toString()
     }

@@ -164,7 +164,7 @@ public class DotsIndicator extends View implements Indicator {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (mDotsCount > 0) {
+        if (mDotsCount > 1) {
             int width = (int) (mDotsCount * mRadius * 2 + (mDotsCount - 1) * mDotsPadding);
             int height = (int) (mRadius * 2);
             setMeasuredDimension(width, height);
@@ -176,7 +176,7 @@ public class DotsIndicator extends View implements Indicator {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mDotsCount > 0) {
+        if (mDotsCount > 1) {
             float mTempTranslateX = mRadius;
             for (int i = 0; i < mDotsCount; i++) {
                 mPaint.setColor(mCurrentSelectedPosition == i ? mSelectedColor : mUnSelectedColor);

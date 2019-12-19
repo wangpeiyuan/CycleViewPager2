@@ -53,7 +53,7 @@ public class CycleViewPager2 extends FrameLayout {
                 }
             }
             if (mIndicator != null) {
-                mIndicator.onChanged(getPagerRealCount(), getCurrentRealItem());
+                mIndicator.onChanged(getPagerRealCount(), getRealCurrentItem());
             }
         }
     };
@@ -144,10 +144,6 @@ public class CycleViewPager2 extends FrameLayout {
         return 0;
     }
 
-    private int getCurrentRealItem() {
-        return getCurrentItem() >= 1 ? getCurrentItem() - 1 : getCurrentItem();
-    }
-
     public void setOrientation(@ViewPager2.Orientation int orientation) {
         mViewPager2.setOrientation(orientation);
     }
@@ -177,12 +173,16 @@ public class CycleViewPager2 extends FrameLayout {
         Logger.d("setCurrentItem " + item);
         mViewPager2.setCurrentItem(item, smoothScroll);
         if (!smoothScroll && mIndicator != null) {
-            mIndicator.onPageSelected(getCurrentRealItem());
+            mIndicator.onPageSelected(getRealCurrentItem());
         }
     }
 
     public int getCurrentItem() {
         return mViewPager2.getCurrentItem();
+    }
+
+    public int getRealCurrentItem() {
+        return getCurrentItem() >= 1 ? getCurrentItem() - 1 : getCurrentItem();
     }
 
     public void setOffscreenPageLimit(@ViewPager2.OffscreenPageLimit int limit) {
@@ -276,7 +276,7 @@ public class CycleViewPager2 extends FrameLayout {
     private void initIndicator() {
         if (mIndicator == null || getAdapter() == null) return;
         addView(mIndicator.getIndicatorView());
-        mIndicator.onChanged(getPagerRealCount(), getCurrentRealItem());
+        mIndicator.onChanged(getPagerRealCount(), getRealCurrentItem());
     }
 
     private void removeIndicatorView() {
@@ -313,7 +313,7 @@ public class CycleViewPager2 extends FrameLayout {
                 mTempPosition = position;
             }
             if (mIndicator != null) {
-                mIndicator.onPageSelected(getCurrentRealItem());
+                mIndicator.onPageSelected(getRealCurrentItem());
             }
         }
 

@@ -119,8 +119,8 @@ class MainActivity : AppCompatActivity() {
 
         override fun getRealItemCount(): Int = bannerItems.size
 
-        override fun onRealBindViewHolder(holder: PagerViewHolder, position: Int) {
-            Log.d(TAG, "onRealBindViewHolder $position")
+        override fun onBindRealViewHolder(holder: PagerViewHolder, position: Int) {
+            Log.d(TAG, "onBindRealViewHolder $position")
             holder.ivPager.setImageResource(bannerItems[position])
             holder.tvTitle.text = position.toString()
         }
@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun getRealItemCount(): Int = textList.size
 
-        override fun onRealBindViewHolder(holder: TextViewHolder, position: Int) {
+        override fun onBindRealViewHolder(holder: TextViewHolder, position: Int) {
             holder.tvItemContent.text = textList[position]
         }
 
